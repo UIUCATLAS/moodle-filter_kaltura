@@ -173,6 +173,8 @@ function filter_kaltura_callback($link) {
     $height = filter_kaltura::$defaultheight;
     $source = '';
 
+    $playerid = get_config('filter_kaltura','preferred_playerid');
+
     // Convert KAF URI anchor tags into iframe markup.
     $count = count($link);
     if ($count > 7) {
@@ -186,13 +188,20 @@ function filter_kaltura_callback($link) {
             return $link[0];
         }
 
-        $source = filter_kaltura::$kafuri . '/browseandembed/index/media/entryid/' . $link[$count - 4] . $link[$count - 3];
+        $urltail = $link[$count - 3];
+        if (!empty($playerid)) {
+            $urltail = preg_replace('\\/playerSkin\\/[0-9]+\\/','\\/playerSkin\\/'.$playerid.'\\/',$urltail);
+        }
+        $source = filter_kaltura::$kafuri . '/browseandembed/index/media/entryid/' . $link[$count - 4] . $urltail;
     }
 
     // Convert v3 anchor tags into iframe markup.
     if (7 == count($link) && $link[1] == filter_kaltura::$apiurl) {
+        if (empty($playerid)) {
+            $playerid = $link[3];
+        }
         $source = filter_kaltura::$kafuri.'/browseandembed/index/media/entryid/'.$link[4].'/playerSize/';
-        $source .= filter_kaltura::$defaultwidth.'x'.filter_kaltura::$defaultheight.'/playerSkin/'.$link[3];
+        $source .= filter_kaltura::$defaultwidth.'x'.filter_kaltura::$defaultheight.'/playerSkin/'.$playerId;
     }
 
     $params = array(
