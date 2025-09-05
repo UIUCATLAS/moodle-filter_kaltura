@@ -31,4 +31,12 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtextarea('filter_kaltura_uris',
         get_string('uris', 'filter_kaltura'),
         get_string('uris_help', 'filter_kaltura'), ''));
+
+    // The other two settings were put in the config table, which is poor design
+    // this configuration setting is stored in the config_plugins table instead
+    $settings->add(new admin_setting_configtext('filter_kaltura/preferred_playerid',
+        get_string('preferred_playerid', 'filter_kaltura'),
+        get_string('preferred_playerid_help', 'filter_kaltura'),
+        ''
+    ));
 }

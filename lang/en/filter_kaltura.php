@@ -30,3 +30,5 @@ $string['uris'] = 'Alternate KAF URIs';
 $string['uris_help'] = 'Enter alternate KAF URIs to filter, one per line';
 $string['unable'] = 'Unable to convert video at this time';
 $string['privacy:metadata'] = 'The Kaltura Media filter does not store any personal data.';
+$string['preferred_playerid'] = 'Default PlayerId';
+$string['preferred_playerid_help'] = 'Provide a global PlayerId, leave blank to infer playerid from filtered text';

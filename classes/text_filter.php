@@ -100,6 +100,7 @@ class text_filter extends \core_filters\text_filter {
         $width = self::$defaultwidth;
         $height = self::$defaultheight;
         $source = '';
+        $playerid = get_config('filter_kaltura','preferred_playerid');
 
         // Convert KAF URI anchor tags into iframe markup.
         $count = count($link);
@@ -114,13 +115,20 @@ class text_filter extends \core_filters\text_filter {
                 return $link[0];
             }
 
-            $source = self::$kafuri . '/browseandembed/index/media/entryid/' . $link[$count - 4] . $link[$count - 3];
+            $urltail = $link[$count - 3];
+            if (!empty($playerid)) {
+                $urltail = preg_replace('\\/playerSkin\\/[0-9]+\\/','\\/playerSkin\\/'.$playerid.'\\/',$urltail);
+            }
+            $source = self::$kafuri . '/browseandembed/index/media/entryid/' . $link[$count - 4] . $urltail;
         }
 
         // Convert v3 anchor tags into iframe markup.
         if (7 == count($link) && $link[1] == self::$apiurl) {
+            if (empty($playerid)) {
+                $playerid = $link[3];
+            }
             $source = self::$kafuri.'/browseandembed/index/media/entryid/'.$link[4].'/playerSize/';
-            $source .= self::$defaultwidth.'x'.self::$defaultheight.'/playerSkin/'.$link[3];
+            $source .= self::$defaultwidth.'x'.self::$defaultheight.'/playerSkin/'.$playerId;
         }
 
         $params = array(
